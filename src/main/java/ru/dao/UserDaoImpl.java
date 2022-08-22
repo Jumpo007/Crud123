@@ -1,44 +1,45 @@
 package ru.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.models.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
-@Component
+@Repository
 public class UserDaoImpl implements UserDao {
-    private static int USER_COUNT;
-    private List<User> users;
+    private EntityManager entityManager;
 
-    {
-        users = new ArrayList<>();
-        users.add(new User(++USER_COUNT,"Tom"));
-        users.add(new User(++USER_COUNT,"Bob"));
-        users.add(new User(++USER_COUNT,"Mike"));
-        users.add(new User(++USER_COUNT,"Katy"));
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
-
+    @Override
+    @SuppressWarnings("unchecked")
     public List<User> index() {
-        return users;
+        Query query = entityManager.createQuery("from User");
+        return query.getResultList();
     }
     public User showUser(int id) {
-        return users.stream().filter(users -> users.getId() == id).findAny().orElse(null);
+        return entityManager.find(User.class, id);
     }
 
     @Override
     public void saveUser(User user) {
-        user.setId(++USER_COUNT);
-        users.add(user);
+        entityManager.persist(user);
     }
 
     @Override
     public void updateUser(int id, User user) {
-        User userToBeUpdated = showUser(id);
-        userToBeUpdated.setName(user.getName());
+        entityManager.merge(user);
     }
 
     @Override
     public void deleteUser(int id) {
-        users.removeIf(p -> p.getId() == id);
+        User user = entityManager.find(User.class, id);
+        entityManager.remove(user);
     }
 }
