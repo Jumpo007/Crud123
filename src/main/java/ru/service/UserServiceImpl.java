@@ -1,15 +1,17 @@
 package ru.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.dao.UserDao;
 import ru.models.User;
 
+import javax.transaction.Transactional;
 import java.util.List;
-@Component
+@Service
 public class UserServiceImpl implements UserService{
 
     private final UserDao userDao;
-
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
     }
@@ -25,16 +27,19 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void saveUser(User user) {
         userDao.saveUser(user);
     }
 
     @Override
+    @Transactional
     public void updateUser(int id, User user) {
         userDao.updateUser(id,user);
     }
 
     @Override
+    @Transactional
     public void deleteUser(int id) {
         userDao.deleteUser(id);
     }
