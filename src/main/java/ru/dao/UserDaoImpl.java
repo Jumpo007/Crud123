@@ -20,8 +20,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<User> index() {
-        Query query = entityManager.createQuery("from User");
-        return query.getResultList();
+        return entityManager.createQuery("select u from User u", User.class)
+                .getResultList();
     }
     public User showUser(int id) {
         return entityManager.find(User.class, id);
@@ -39,7 +39,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void deleteUser(int id) {
-        User user = entityManager.find(User.class, id);
-        entityManager.remove(user);
+        entityManager.createQuery("delete from User u where u.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }
