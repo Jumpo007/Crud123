@@ -1,8 +1,16 @@
 package ru.models;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class User {
     private int id;
+//    @NotEmpty(message = "Name should not be empty")
+//    @Size(min = 2, max = 10, message = "Name should be between 2 and 10 characters")
     private String name;
+
+    public User() {
+    }
 
     public User(int id, String name) {
         this.id = id;

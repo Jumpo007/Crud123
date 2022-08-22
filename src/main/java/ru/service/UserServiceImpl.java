@@ -20,7 +20,22 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User show(int id) {
-        return userDao.show(id);
+    public User showUser(int id) {
+        return userDao.showUser(id);
+    }
+
+    @Override
+    public void saveUser(User user) {
+        userDao.saveUser(user);
+    }
+
+    @Override
+    public void updateUser(int id, User user) {
+        userDao.updateUser(id,user);
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        userDao.deleteUser(id);
     }
 }
